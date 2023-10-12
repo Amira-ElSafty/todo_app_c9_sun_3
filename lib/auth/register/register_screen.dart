@@ -157,8 +157,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             title: 'Success', posActionName: 'Ok', posAction: () {
           Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
         });
-        print('register succuessfully');
-        print(credential.user?.uid ?? '');
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           // todo: hide loading
@@ -166,14 +164,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           // todo: show message
           DialogUtils.showMessage(context, 'The password provided is too weak.',
               title: 'Error', posActionName: 'Ok');
-          print('The password provided is too weak.');
         } else if (e.code == 'email-already-in-use') {
           DialogUtils.hideLoading(context);
           // todo: show message
           DialogUtils.showMessage(
               context, 'The account already exists for that email',
               title: 'Error', posActionName: 'Ok');
-          print('The account already exists for that email.');
         }
       } catch (e) {
         DialogUtils.hideLoading(context);
@@ -184,7 +180,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           posActionName: 'Ok',
           title: 'Error',
         );
-        print(e);
       }
     }
   }

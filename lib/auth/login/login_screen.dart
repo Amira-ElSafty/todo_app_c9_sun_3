@@ -5,9 +5,8 @@ import 'package:flutter_app_todo_sun_3/components/custom_text_form_field.dart';
 import 'package:flutter_app_todo_sun_3/dialog_utils.dart';
 import 'package:flutter_app_todo_sun_3/firebase_utils.dart';
 import 'package:flutter_app_todo_sun_3/home/home_screen.dart';
+import 'package:flutter_app_todo_sun_3/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = 'login';
@@ -140,28 +139,21 @@ class _LoginScreenState extends State<LoginScreen> {
             title: 'Success', posActionName: 'Ok', posAction: () {
           Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
         });
-        print(credential.user?.uid ?? "");
       } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
+        if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+          // todo: hide loading
           DialogUtils.hideLoading(context);
           // todo: show message
-          DialogUtils.showMessage(context, 'No user found for that email.',
+          DialogUtils.showMessage(context,
+              'No user found for that email or Wrong password provided for that user.',
               title: 'Error', posActionName: 'Ok');
-          print('No user found for that email.');
-        } else if (e.code == 'wrong-password') {
-          DialogUtils.hideLoading(context);
-          // todo: show message
-          DialogUtils.showMessage(
-              context, 'Wrong password provided for that user.',
-              title: 'Error', posActionName: 'Ok');
-          print('Wrong password provided for that user.');
         }
       } catch (e) {
+        // todo: hide loading
         DialogUtils.hideLoading(context);
         // todo: show message
         DialogUtils.showMessage(context, '${e.toString()}',
             title: 'Error', posActionName: 'Ok');
-        print(e.toString());
       }
     }
   }
